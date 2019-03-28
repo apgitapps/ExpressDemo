@@ -1,0 +1,16 @@
+{
+    "name": "ExpressDemo",
+    "version": "1.0.0",
+    "keywords": [
+        "util",
+        "functional",
+        "server",
+        "client",
+        "browser"
+    ],
+    "author": "Austin",
+    "contributors": [],
+    "dependencies": {
+        "express": "^4.16.4"
+    }
+}
