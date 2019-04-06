@@ -11,6 +11,12 @@
     "author": "Austin",
     "contributors": [],
     "dependencies": {
-        "express": "^4.16.4"
+        "config": "^3.0.1",
+        "debug": "^4.1.1",
+        "express": "^4.16.4",
+        "helmet": "^3.16.0",
+        "joi": "^13.7.0",
+        "morgan": "^1.9.1",
+        "pug": "^2.0.3"
     }
 }

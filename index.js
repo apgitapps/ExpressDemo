@@ -5,56 +5,40 @@
 
 const express = require("express");
 const app = express();
-const courses =
-        [
-            { id: 1, name: "course1" },
-            { id: 2, name: "course2" },
-            { id: 3, name: "course3" }
-        ];
+const config = require("config"); //get app settings
+const helmet = require("helmet"); //for setting http headers
+const morgan = require("morgan"); //http request logger
+const Joi = require("joi"); //uppercase for Joi class
+const debug = require("debug")("app:startup");
+const logger = require("./middleware/logger"); //middleware func
+const courses = require("./routes/courses"); //load courses module
+const home = require("./routes/home");
 
-// - GET 
+app.set("view engine", "pug"); //templating engine
+app.set("views", "./views"); //default tempaltes
 
-//   + main page 
-app.get("/", (req, res) =>
+app.use(express.json()); //parse json
+app.use(express.urlencoded({ extended: true })); //for key value pairs
+app.use(express.static("public")); //public folder
+app.use(helmet());
+app.use(logger);
+app.use("/api/courses", courses); //path (for shortening), router object
+app.use("/", home);
+
+console.log("Application Name: " + config.get("name"));
+console.log("Mail Server: " + config.get("mail.host"));
+console.log("Mail Password: " + config.get("mail.password"));
+
+if(app.get("env") === "development")
+{
+    app.use(morgan("tiny"));
+    debug("Morgan enabled..."); //console.log
+}
+
+app.use(function(req, res, next)
     {
-        res.send("Hello world");
-    });
-
-//   + show courses 
-app.get("/api/courses", (req, res) =>
-    {
-        res.send(courses);
-    });
-
-//   + show specific course
-app.get("/api/courses/:id", (req, res) =>
-    {
-        //get the course that matches ID
-        const course = courses.find(c => c.id === parseInt(req.params.id));
-        
-        if(!course) 
-        { res.status(404).send("The course ID was not found!"); }
-        
-        res.send(course);
-    });
-
-// - POST 
-
-//   + add course
-app.post("/api/courses", (req, res) =>
-    {
-        if(!req.body.name || req.body.name.length < 3)
-        {
-            //400: bad request
-            res.status(400).send("Name is required and should be\n\
-                minimum 3 characters!");
-            return; //do not want to execute any more of function
-        }
-        
-        const course = { id: courses.length + 1, name: req.body.name };
-        
-        courses.push(course); //object posted to server
-        res.send(course); //return new object in response body
+        console.log("Authenticating...");
+        next();
     });
 
 const port = process.env.PORT || 3000;
