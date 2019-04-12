@@ -2,6 +2,7 @@
 //const - cannot be rassigned
 //let - variable to represent 1 thing, for loops/algorithms
 //var - when variable will be reassigned
+//to run, "set app_password=1234"
 
 const express = require("express");
 const app = express();

@@ -10,9 +10,7 @@ const courses =
 // - GET 
 //   + show courses 
 router.get("/", (req, res) =>
-{
-    res.send(courses);
-});
+{ res.send(courses); });
 
 //   + show specific course
 router.get("/:id", (req, res) =>
